@@ -82,9 +82,44 @@ All in all, Groovy is a also a good super Java and very powerful to implement DS
 
 Kotlin
 ------
-Another super java ?
+With Scala and Java experience, [Kotlin](https://kotlinlang.org/)) feels very familiar. Coming from Scala which thanks to Martin Odersky has very solid theoritical foundation, I was expecting a more ad-hoc feeling like with Groovy.
 
+Let's see if my preconceptions are confirmed.
 
+To model the tree, ADT support is good and the language supports immutable structures so not need to implement equals/hashcode:
+``
+sealed class Node<T> {
+    data class Leaf<T>(val dummy: Int) : Node<T>() // Cannot use object there because of generic
+    // and dataclass has to have a value
+
+    data class Branch<T>(
+        val v: T,
+        val left: Node<T>,
+        val right: Node<T>
+    ) : Node<T>()
+}
+``
+
+One limitation compared to Scala is that 'object' cannot be used with 'generics'. So although we need only one instance of 'Leaf', to make it compile we need to add a dummy parameter to make it a class. Clearly here Scala is a lot better thought out. That is an edge case but usually it is where the complexity lies, [it is the last 20% that takes 80% of the time to implement](https://en.wikipedia.org/wiki/Pareto_principle). The [implementation in Scala 3](https://github.com/benoitpas/dotty-tree/blob/main/src/main/scala/MyTree.scala#L3) is really neat in comparison.
+
+The pattern matching, altought not as extensive as in Scala is still well thought out, in the expression after the ``is``, it is possible to directly access the fields of the type: for example although ``tree`` has type ``Node<T>``, in the ``Branch`` expresion we can use ``tree.left``, ``tree.right`` and ``tree.v``.
+
+Tupple support is good but a bit verbose in my opinion.
+
+``
+fun <T> addId(tree: Node<T>, index: Int): Pair<Node<Pair<T, Int>>,Int> {
+    return when (tree) {
+        is Leaf -> Pair(Leaf<Pair<T, Int>>(0), index)
+        is Branch -> {
+            val newLeft = addId<T>(tree.left, index)
+            val newValue = Pair(tree.v, newLeft.second)
+            val newRight = addId(tree.right, newLeft.second+1)
+            Pair(Branch(newValue, newLeft.first, newRight.first), newRight.second)
+        }
+    }
+``
+
+So Koltin is clear more than another super java and as you would expect, the support for it is great in Intellij. For other languages, especially on small projects, I prefer to use VS Code, there is just less fan noise with it ;-).
 
 Clojure
 -------
