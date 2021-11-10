@@ -31,21 +31,21 @@ One advantage of Groovy is that types are already available for tuples which all
 
 Another nice extension of Groovy is the ``@Immutable`` notation with which the implementation of 'HashCode' and 'equals' are [automatically added](https://blog.mrhaki.com/2009/09/groovy-goodness-making-class-immutable.html).
 
-``
+```
 @Immutable
 class Leaf<T> implements Tree<T> {
     Tuple2<Tree<Tuple2>, Integer> addId(Integer index) {
         return new Tuple2<Tree<Tuple2>, Integer>(this,index)
     }
 }
-``
+```
 
 Still for the ``Node`` implementation we cannot use ``@Immutable`` because all class variables also need to be immutable.
 So here we have to implement ``equals``. ``hashCode`` is not implemeted as it is not necessary for that example.
 
  It is also worth noticing that as Groovy is an interpreted language, it took me a few runs to get all types ironed out, some of the errors would have been caught by a compiler with a fully static types language.
 
-``
+```
 class Node<T> implements Tree<T> {
     final private T value
     final private Tree<T> left
@@ -78,7 +78,7 @@ class Node<T> implements Tree<T> {
                 newRight.second + 1)
     }
 }
-``
+```
 
 Another nice feature of Groovy is that it is quite lax with semi-columns making the code easier to read.
 
@@ -88,11 +88,11 @@ Because of its extensive use in Jenkins and as a glue language, there is a lot o
 
 Kotlin
 ------
-With Scala and Java experience, [Kotlin](https://kotlinlang.org/)) feels very familiar. Coming from Scala which thanks to [Martin Odersky](https://en.wikipedia.org/wiki/Martin_Odersky) has very solid theoritical foundation, I was expecting a more ad-hoc feeling like with Groovy.
+With Scala and Java experience, [Kotlin](https://kotlinlang.org/)) feels very familiar. Coming from Scala, which thanks to [Martin Odersky](https://en.wikipedia.org/wiki/Martin_Odersky), has very solid theoritical foundation, I was expecting a more ad-hoc feeling like with Groovy.
 
 Let's see if my preconceptions are confirmed.
 
-To model the tree, ADT support is good and the language supports immutable structures so not need to implement equals/hashcode:
+To model the tree, ADT support is good and the language has immutable structures so not need to implement equals/hashcode:
 ``
 sealed class Node<T> {
     data class Leaf<T>(val dummy: Int) : Node<T>() // Cannot use object there because of generic
@@ -112,7 +112,7 @@ The pattern matching, altought not as extensive as in Scala is still well though
 
 Tupple support is good but a bit verbose in my opinion.
 
-``
+```
 fun <T> addId(tree: Node<T>, index: Int): Pair<Node<Pair<T, Int>>,Int> {
     return when (tree) {
         is Leaf -> Pair(Leaf<Pair<T, Int>>(0), index)
@@ -123,17 +123,17 @@ fun <T> addId(tree: Node<T>, index: Int): Pair<Node<Pair<T, Int>>,Int> {
             Pair(Branch(newValue, newLeft.first, newRight.first), newRight.second)
         }
     }
-``
+```
 
-So Koltin is clear more than another super java and as you would expect, the support for it is great in Intellij. For other languages, especially on small projects, I prefer to use VS Code, there is just less fan noise with it ;-).
+So Koltin is clear more than another super java and as you would expect, the support for it is great in Intellij. For other languages, especially on small projects, I prefer to use VS Code, there is just less fan noise from the laptop with it ;-).
 
 All in all, Kotlin is a good language, more concise and more pleasant to use than Java in my opinion but not as finished and thought out as Scala, especially Scala 3.
 
 Clojure
 -------
-I decided to add Clojure to the list as I thought it would be fun and I was thinking maybe I could use it for the [advent of code](https://adventofcode.com/) as well. For ther record, I really looked at Clojure in 2011 when I bought the first edition of []Programming Clojure](https://pragprog.com/titles/shcloj3/programming-clojure-third-edition/). I had been knowing about Lisp and Scheme before but that was the first time I really properly learned one language of this family and I wrote a few test/glue programs with it. I also learnt Scala at the same time and knowing both was really helped me understand the specifities of functional programming.
+I decided to add Clojure to the list as I thought it would be fun and I was thinking maybe I could use it for the [advent of code](https://adventofcode.com/) as well. For ther record, I really looked at Clojure in 2011 when I bought the first edition of []Programming Clojure](https://pragprog.com/titles/shcloj3/programming-clojure-third-edition/). I have been knowing about [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and [Scheme](https://en.wikipedia.org/wiki/Scheme_(programming_language)) before but that was the first time I really properly learned one language of this family.  I wrote a few test/glue programs with it. I also learnt Scala at the same time and knowing both was really helped me understand the specifities of functional programming.
 
-First, let's state the obvious, although Clojure runs on the JVM it is not clearly not Java ! But it still shares some common ancestry with Java, as Java itself has inherited quite a few concepts from [Common Lisp](https://en.wikipedia.org/wiki/Common_Lisp) like the optimized virtual machine and extensive common libraries (as well as [Object Orientation](https://en.wikipedia.org/wiki/Common_Lisp#Common_Lisp_Object_System_(CLOS)) to add a bad inheritance pun ;-) ). Although to be complete, the inheritance is probably indirect as the conceptor of Java probably have looked as much in SmallTalk which itself tool a lot of inspiration from Common-Lisp.
+First, let's state the obvious, although Clojure runs on the JVM it is not clearly not Java ! But it still shares some common ancestry with Java, as Java itself has inherited quite a few concepts from [Common Lisp](https://en.wikipedia.org/wiki/Common_Lisp) like the optimized virtual machine and extensive common libraries (as well as [Object Orientation](https://en.wikipedia.org/wiki/Common_Lisp#Common_Lisp_Object_System_(CLOS)) to add a bad inheritance pun ;-) ). Although to be complete, the inheritance is probably indirect as the conceptors of Java probably have looked to SmallTalk which itself took a lot of inspiration from Common-Lisp.
 
 So to go back to our algorithm, modelling the tree is very straight-forward, nested lists all the way !
 ```
@@ -144,7 +144,8 @@ As Clojure is interpreted, I present an instance of a specific tree. There is an
 To add the 'id' to the note, I simply replace the value by a list with 2 elements, the first one being the value and the second the identifier.
 
 Here is the code for the function to add the identifier:
-``` (defn addId-hm
+``` 
+(defn addId-hm
   "Add unique id to nodes in a tree store in a hash-map"
   [tree i]
   (if-not tree (list '() i)
@@ -161,8 +162,8 @@ Here is the code for the function to add the identifier:
       r3 (if (empty? n-right) r2 (assoc r2 :right n-right))
     ] (list r3 i3))
   ))
-
 ```
+
 Interestingly enough, as I was a bit rusty with Clojure I used a TDD approach to get it right as I couldn't use the type system as crutches for my failing memory ;-).
 
 I also used more intermediary variable compared with the implementation in other languages as I was not used to read expressions with a lot (too many ? ;-)) parenthesis. Having to use a list to store tupples also makes the code less readable and more verbose.
@@ -217,7 +218,7 @@ Out of curiosity I also tried to store the list in a hash-map to see if the impl
   ))
   ```
 
-  There is a little less of 'list wrangling' but still a fair share of duplicated code.
+There is a little less of 'list wrangling' but still a fair share of duplicated code.
 
 Conclusion
 ----------
