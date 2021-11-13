@@ -5,7 +5,7 @@ title: Three trees
 
 ![3-trees]({{ site.baseurl }}/images/3-trees.jpg)
 
-There are a few JVM based languages that I have either been using on and off or curious to know about so I decided to cover them in an article where I implement the tree based algorithm already covered in the previous articles on [Scala3](https://benoitpas.github.io/Dotty/), [various versions of Java](https://benoitpas.github.io/Java/) and [Rust](https://benoitpas.github.io/Rust/).
+There are a few JVM based languages that I either have been using on and off, or curious to know about. So I decided to cover them in an article where I implement the tree based algorithm already covered in the previous articles on [Scala3](https://benoitpas.github.io/Dotty/), [various versions of Java](https://benoitpas.github.io/Java/) and [Rust](https://benoitpas.github.io/Rust/).
 
 This time I decided to cover:
 * [Groovy](https://groovy-lang.org/), github project [here](https://github.com/benoitpas/groovy-tree)
@@ -14,7 +14,7 @@ This time I decided to cover:
 
 Groovy
 ------
-Groovy is one of the first JVM based languages and thanks to its use as Jenkins [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) it has been quickly adopted. I have used it a bit over the years but mostly as DSL, also when writing [Gradle](https://gradle.org/) build scripts.
+Groovy is one of the first JVM based languages, and thanks to its use as [Jenkins](https://www.jenkins.io/doc/) [DSL](https://en.wikipedia.org/wiki/Domain-specific_language), it has been quickly adopted. I have used it occasionaly over the years but mostly as Jenkins DSL and also when writing [Gradle](https://gradle.org/) build scripts.
 
 I thought that would be interesting to do something a little more complicated with it.
 The first impression is, that despite having some functional elements like [Closures](https://groovy-lang.org/closures.html), the lack of modern functiomal constructs like [ADT](https://en.wikipedia.org/wiki/Abstract_data_type) makes the language feel a bit outdated.
@@ -43,7 +43,7 @@ class Leaf<T> implements Tree<T> {
 Still for the ``Node`` implementation we cannot use ``@Immutable`` because all class variables also need to be immutable.
 So here we have to implement ``equals``. ``hashCode`` is not implemeted as it is not necessary for that example.
 
- It is also worth noticing that as Groovy is an interpreted language, it took me a few runs to get all types ironed out, some of the errors would have been caught by a compiler with a fully static types language.
+ It is also worth noticing that as Groovy is an interpreted language, it took me a few runs to get all types ironed out, some of the errors would have been caught by a compiler with a fully static typed language.
 
 ```
 class Node<T> implements Tree<T> {
@@ -110,7 +110,7 @@ One limitation compared to Scala is that 'object' cannot be used with 'generics'
 
 So although we need only one instance of 'Leaf', to make it compile we need to add a dummy parameter to make it a class. Clearly here Scala is a lot better thought out. That is an edge case but usually it is where the complexity lies, [it is the last 20% that takes 80% of the time to implement](https://en.wikipedia.org/wiki/Pareto_principle). The [implementation in Scala 3](https://github.com/benoitpas/dotty-tree/blob/main/src/main/scala/MyTree.scala#L3) is really neat in comparison.
 
-Pattern matching, altought not as extensive as in Scala is still well thought out. In the expression after the ``is``, it is possible to directly access the fields of the type: for example although ``tree`` has type ``Node<T>``, in the ``Branch`` expresion we can use ``tree.left``, ``tree.right`` and ``tree.v``.
+Pattern matching, altought not as extensive as in Scala is still well thought out. In the expression after the ``is``, it is possible to directly access the fields of the type: for example although ``tree`` has type ``Node<T>``, in the ``Branch`` expression we can use ``tree.left``, ``tree.right`` and ``tree.v``.
 
 Tuple support is good but a bit verbose in my opinion.
 
@@ -127,7 +127,7 @@ fun <T> addId(tree: Node<T>, index: Int): Pair<Node<Pair<T, Int>>,Int> {
     }
 ```
 
-So Koltin is clearly more than another super java, and as you would expect, it has great support in Intellij. For other languages, especially on small projects, I prefer to use VS Code, there is just less fan noise from the laptop with it ;-).
+So Koltin is clearly more than another super java, and as you would expect, it has great support in [Intellij](https://plugins.jetbrains.com/plugin/6954-kotlin). For other languages, especially on small projects, I prefer to use [VS Code](https://code.visualstudio.com/), there is just less fan noise from the laptop with it ;-).
 
 All in all, Kotlin is a good language, more concise and more pleasant to use than Java in my opinion but not as finished and thought out as Scala, especially Scala 3.
 
@@ -256,5 +256,5 @@ Clojure is the most interesting language of the three because of its inheritance
 
 Clojure is also a great language to learn to deepen our knowledge but it may not be a great choice for long lived projects which see team turnover. First, even for engineers who know it, for a project that contains other languages it requires some mental gymnastic when switching. Also it will take more time for an engineer to get fully up to speed on the project if some parts are in Clojure. It clearly makes it harder to recruit but on the other hand, people who know Clojure may be of a higher caliber than engineers than only know Java.
 
-Realistically, for new projects if I need a glue/prototyping lanaguage, now I would use Python as it is widely available and the syntax doesn't scare most people ;-).
+Realistically, for new projects if I need a glue/prototyping language, I would now use Python as it is widely available and the syntax doesn't scare most people ;-).
 
