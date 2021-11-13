@@ -3,8 +3,16 @@ title: page test
 layout: page
 ---
 
-avant
+<canvas></canvas>
+
 <script type="text/javascript">
-    alert("This alert box was called with the onload event");
+  const canvas = document.querySelector('canvas');
+  const ctx = canvas.getContext('2d');
+
+  const width = canvas.width = window.innerWidth;
+  const height = canvas.height = window.innerHeight;
+
+  ctx.moveTo(0, 0);
+  ctx.lineTo(width, height);
+  ctx.stroke(); 
 </script>
-apres
