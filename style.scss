@@ -25,7 +25,7 @@ body {
 
 .container {
   margin: 0 auto;
-  max-width: 740px;
+  max-width: 960px;
   padding: 0 10px;
   width: 100%;
 }
@@ -254,9 +254,9 @@ nav {
 .post {
   blockquote {
     margin: 1.8em .8em;
-    border-left: 2px solid $gray;
+    border-left: 2px solid #aee6da;
     padding: 0.1em 1em;
-    color: $gray;
+    color: #c9f2e9;
     font-size: 22px;
     font-style: italic;
   }
