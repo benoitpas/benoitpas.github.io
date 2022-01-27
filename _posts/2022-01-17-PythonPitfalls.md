@@ -32,6 +32,25 @@ l.sort()
 l[:5]
 ```
 
+Immutable collections and wether they contain a value or a reference to value can also introduce subtle bugs.
+Here is an interesting example:
+```
+>>> m = [[False] * 3] * 3
+>>> m
+[[False, False, False], [False, False, False], [False, False, False]]
+>>> m[0][0]=True
+>>> m
+[[True, False, False], [True, False, False], [True, False, False]]
+```
+When `m` is created, it looks like a 2 dimensional boolean array (well list of lists to be precise !).
+But when we try to modify one element (`m[0][0]`)we realise there is actually only 1 row which is referenced 3 times in the top level list !
+This is because the operator `*` behaves differently whether the list on the left contains either:
+* values, like with `[False] * 3` where a copy of the value False is created
+* or references, like with `[[False False False] * 3]` where two new references to `[False False False]` are used,
+not a [copy](https://docs.python.org/3/library/copy.html) of the list.
+
+This behavior is consistent with the semantic of the assigment operator (`=`) but it was surprising none the less.
+
 Actually Python does have some sort of immutable collections in the form of ['tuples'](https://www.w3schools.com/python/python_tuples.asp).
 They cannot easily be used as immutable lists because there is only one operation possible on them.
 
@@ -71,12 +90,23 @@ As a consequence, to make the code more readable (or at least behaves more like 
 as they make it *explicit* the result is an iterator. They can be used instead of `map()`, `filter()` and even `flatmap()` for some limited cases.
 That also makes the code more Python idiomatic.
 
+The change is quite visible in my advent of code 2021 [solutions](https://github.com/benoitpas/advent-of-code-2021).
+
 # Dynamic typing !
 
 Dynamic typing does exist in some functional langages (like [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) or [Scheme](https://en.wikipedia.org/wiki/Scheme_(programming_language)))
 but as most recent functional langages like Scala or [Haskell](https://www.haskell.org/) are statically typed, it is another difference that is worth keeping in mind.
 
-The main consequence of dynamic typing is that quite a few errors are only caught when running the program (especially when refactoring). 
+One of the main drawbacks of dynamic typing is that quite a few errors are only caught when running the program (especially when refactoring).
+For example, if I forget the paranthesis in `l.sort`, the code will run but the list will not be sorted:
+```
+>>> l = [3,1,4]
+>>> l.sort
+<built-in method sort of list object at 0x7fe670a21cc0>
+>>> l
+[3, 1, 4]
+```
+
 As a consequence, I started adding more unit tests, especially to test functions/methods input parameters. 
 It is not great when the project gets larger as more unit tests mean more code to keep up to date which clearly has a cost.
 
