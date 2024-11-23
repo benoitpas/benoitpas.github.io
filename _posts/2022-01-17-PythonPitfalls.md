@@ -63,12 +63,11 @@ For all other operations which would return a new tuple (like `sort()`), they ne
 
 # Generators !
 
-[Python generators](https://wiki.python.org/moin/Generators) are a generalization of [iterators](https://en.wikipedia.org/wiki/Iterator)) 
-and as such they are inherently *not* functional: the `next()` operation on an iterator can return a different value every time it is called.
+[Python generators](https://wiki.python.org/moin/Generators) are a generalization of [iterators](https://en.wikipedia.org/wiki/Iterator) and as such they are inherently *not* functional: the `next()` operation on an iterator can return a different value every time it is called.
 
 They are used extensively in Python as they perform well, even in 'functional' modules like [`functools`](https://docs.python.org/3/library/functools.html#module-functools).
 
-For example, both [`map()`]() and [`reduce()`](https://docs.python.org/3/library/functools.html#functools.reduce) return an object which is an iterator. That means the resulting collection can only be `used' (or more precisely iterated) only once.
+For example, both [`map()`](https://docs.python.org/3/library/functions.html#map) and [`reduce()`](https://docs.python.org/3/library/functools.html#functools.reduce) return an object which is an iterator. That means the resulting collection can only be `used' (or more precisely iterated) only once.
 
 It is very clear in the following session where the first `sum(l2)` returns the expected value `(12=1*2+3*2+3*2)` 
 but the second call returns 0 because there are no more values to iterate, it is equivalent to evaluating `sum([])`. 
